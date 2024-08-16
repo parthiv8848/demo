@@ -1,0 +1,82 @@
+{% load i18n %}
+{% load report %}
+{% load barcode %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Label</title>
+    <style>
+        @page {
+            size: 50mm 47mm;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .part {
+            width: 100%;
+            text-align: left;
+            padding: 1mm;
+            box-sizing: border-box;
+            font-size: 6pt;
+        }
+
+        .part .title {
+            margin: 0;
+            font-size: 8pt;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .part .description {
+            margin: 0;
+            font-size: 8pt;
+            color: #555;
+        }
+
+        .part .mpn-list {
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .part .mpn-item {
+            margin-bottom: 2px;
+            font-size: 8pt;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <img style="width: 15mm; height: 15mm; flex-shrink: 0; padding: 1mm;" alt="{% trans 'QR Code' %}"
+                src="{% qrcode qr_data %}">
+            <img style="width: 20mm; height: auto; margin-left: auto; flex-shrink: 0;"
+                src="{% static 'img/Vicharak_logo.png' %}" alt="Logo">
+        </div>
+
+        <div class="part">
+            <div class="title">{{ part.name }}</div>
+            <div class="description"><strong>Description:</strong> {{description}}</div>
+            <div class="mpn-list">
+                {% for manufacturer_part in manufacturer_parts %}
+                <div class="mpn-item"><strong>MPN:</strong> {{ manufacturer_part.MPN }}</div>
+                {% empty %}
+                <div class="mpn-item">No manufacturer parts available.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
